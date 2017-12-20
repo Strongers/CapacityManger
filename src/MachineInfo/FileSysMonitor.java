@@ -4,7 +4,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 
 /**
@@ -13,18 +15,18 @@ import java.util.Timer;
  * @author dell-pc
  */
 public class FileSysMonitor {
-	private int timeInterval;
+	private float timeInterval;
 	private FileSysIndicator fileSysIndicator;
 	private Timer timer;
 	
 	/**
 	 * @param timeInterval in seconds
 	 */
-	public FileSysMonitor(int timeInterval) {
+	public FileSysMonitor(float timeInterval) {
 		this.timeInterval = timeInterval;
 		this.timer = new Timer();
 		this.fileSysIndicator = new FileSysIndicator(false);
-		timer.schedule(this.fileSysIndicator, 0, this.timeInterval*1000);
+		timer.schedule(this.fileSysIndicator, 0, (int) (this.timeInterval*1000));
 	}
 	
 	/**
@@ -43,11 +45,19 @@ public class FileSysMonitor {
 	
 	/**
 	 * Write log to a csv file
-	 * @param filePath
+	 * File will be named in 'log_yyyy_mm_dd_timeInterval.csv'
+	 * @param filePath the path of the folder. 
 	 */
-	public void logWritor(String filePath){
+	public void logWritor(String folder){
 		// Create a new file
-		File file = new File(filePath);
+		String fileName = folder + "\\";
+		// Add time stamp to the file name
+		Date now = new Date();
+		DateFormat formater = DateFormat.getDateInstance();
+		fileName += "log_";
+		fileName += formater.format(now).replaceAll(" ", "_") + "_";
+		fileName += this.timeInterval + ".csv";
+		File file = new File(fileName);
 		try {
 			if(file.exists()){
 				file.delete();
@@ -70,9 +80,9 @@ public class FileSysMonitor {
 	
 	public static void main(String[] args) {
 		// Test
-		FileSysMonitor fm = new FileSysMonitor(3);
+		FileSysMonitor fm = new FileSysMonitor(0.01F);
 		fm.cancelMonitor();
-		fm.logWritor("E:\\file_monitor\\log.csv");
+		fm.logWritor("E:\\file_monitor");
 	}
 
 }
