@@ -12,7 +12,7 @@ import java.util.Timer;
 /**
  * Implement a monitor to get the information of the file system
  * in each time interval.
- * @author dell-pc
+ * @author Stronger
  */
 public class FileSysMonitor {
 	private float timeInterval;
@@ -55,7 +55,7 @@ public class FileSysMonitor {
 		Date now = new Date();
 		DateFormat formater = DateFormat.getDateInstance();
 		fileName += "log_";
-		fileName += formater.format(now).replaceAll(" ", "_") + "_";
+		fileName += formater.format(now).replaceAll("-", "_") + "_";
 		fileName += this.timeInterval + ".csv";
 		File file = new File(fileName);
 		try {
